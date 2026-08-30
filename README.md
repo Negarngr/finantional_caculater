@@ -39,7 +39,7 @@ Python with a clean separation between the finance logic and the CLI menu.
 ```
 
 Keeping the finance functions separate from the menu means they can be
-reused as-is in a different interface  without
+reused as-is in a different interface (e.g. a Streamlit app) without
 touching the calculation logic.
 
 ## Requirements
@@ -85,5 +85,6 @@ pv: 1000
 
 ## Roadmap
 
+- [ ] Streamlit UI on top of the existing `finance.py` functions
 - [ ] Unit tests for each finance function
 - [ ] Type hints and docstrings across `finance.py`
