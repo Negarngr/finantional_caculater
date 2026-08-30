@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import streamlit as st
 
 def fv(rate,pv, periods):
     rate = rate / 12 / 100
@@ -46,7 +45,7 @@ def irr(cashflows, guess=0.1, max_iter=100, tol=1e-6):
             return None
         npv_value =npv (rate * 100 , cashflows)
 
-        d_npv = sum(-i * cf / (1+rate)**(i+1) for i, cf in enumerate(cashflows[1:]))
+        d_npv = sum(-(i+1) * cf / (1+rate)**(i+2) for i, cf in enumerate(cashflows[1:]))
 
         if abs(npv_value) < tol:
 
@@ -150,10 +149,10 @@ def roe (net_income , equity):
     return roe
 
 
-st.header('Welcome! I’m glad to see you here.Here you can have your financial calculator,'
+print('Welcome! I’m glad to see you here.Here you can have your financial calculator,'
     ' and anything you need will be calculated for you. Stay with us and join along.')
     
-st.write('This section is divided into three parts, and each part has its own parameters. Based on your needs, please choose one of the options.')
+print('This section is divided into three parts, and each part has its own parameters. Based on your needs, please choose one of the options.')
 while True:
     main_input = input('Part one: time value of money calculations, where you can choose one option\n1)FV\n2)PV\n3)PMT\n4)NPER\n' \
                     'Part two: investment analysis\n5)NPV\n6)IRR\n7)DPP\n' \
@@ -197,11 +196,11 @@ while True:
                 print("Erorr,You can't enter any other option")
         while True:
             try:
-                pv = int(input('pv :'))
+                pv_input = int(input('pv :'))
                 break
             except ValueError:
                 print('Enter a numeric value')
-        result = fv(rate , pv , periods)
+        result = fv(rate , pv_input , periods)
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -239,11 +238,11 @@ while True:
                 print("Erorr,You can't enter any other option")
         while True:
             try:     
-                fv = int (input('fv : '))
+                fv_input = int (input('fv : '))
                 break
             except ValueError:
                 print('Enter a numeric value')
-        result = pv(rate , fv , periods)
+        result = pv(rate , fv_input , periods)
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -280,11 +279,11 @@ while True:
                 print("Erorr,You can't enter any other option")
         while True:
             try:        
-                pv = int(input('pv: '))
+                pv_input = int(input('pv: '))
                 break
             except ValueError:
                 print('Enter a numeric value')
-        result = pmt(rate , periods, pv )
+        result = pmt(rate , periods, pv_input )
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -299,18 +298,18 @@ while True:
         
         while True :
             try:
-                pmt = int(input('Please enter your monthly installment: '))
-                pmt = -abs(pmt)
+                pmt_input = int(input('Please enter your monthly installment: '))
+                pmt_input = -abs(pmt_input)
                 break
             except ValueError :
                 print('Enter a numeric value')
         while True :
             try :
-                pv =int(input('pv: '))
+                pv_input =int(input('pv: '))
                 break
             except ValueError:
                  print('Enter a numeric value')
-        result = nper(rate , pmt , pv)
+        result = nper(rate , pmt_input , pv_input)
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -389,11 +388,13 @@ while True:
             cashflows.append(invest_user) 
 
         print(cashflows)
-
         result = irr(cashflows)
+        if result is None:
+            print("IRR cannot be calculated (the cash flows did not converge)")
+        else:
+            print(result * 100)
         print("\n" + "—"*40)
-        print(result *100)
-        print("\n" + "—"*40)
+
 
 
 #*****************************************************************************************
@@ -451,7 +452,7 @@ while True:
                 print('Enter a numeric value') 
         while True :
             try :
-                pv =int(input('pv: '))
+                pv_input =int(input('pv: '))
                 break
             except ValueError:
                  print('Enter a numeric value')
@@ -461,7 +462,7 @@ while True:
                 break
             except ValueError :
                 print('Enter a numeric value')         
-        result =  amortization(pv, rate ,years ,payments_per_year )
+        result =  amortization(pv_input, rate ,years ,payments_per_year )
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -475,7 +476,7 @@ while True:
                 print('Enter a numeric value') 
         while True :
             try :
-                pv =int(input('pv: '))
+                pv_input =int(input('pv: '))
                 break
             except ValueError:
                  print('Enter a numeric value')        
@@ -487,11 +488,11 @@ while True:
                  print('Enter a numeric value')
         while True :
             try :
-                nper =int(input('nper: '))
+                nper_input =int(input('nper: '))
                 break
             except ValueError:
                  print('Enter a numeric value')
-        result =  ipmt (rate , pv , per , nper )
+        result =  ipmt (rate , pv_input , per , nper_input )
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -505,7 +506,7 @@ while True:
                 print('Enter a numeric value') 
         while True :
             try :
-                pv =int(input('pv: '))
+                pv_input =int(input('pv: '))
                 break
             except ValueError:
                  print('Enter a numeric value')        
@@ -517,11 +518,11 @@ while True:
                  print('Enter a numeric value')
         while True :
             try :
-                nper =int(input('nper: '))
+                nper_input =int(input('nper: '))
                 break
             except ValueError:
                  print('Enter a numeric value')
-        result =  ppmt (rate , per, nper, pv )
+        result =  ppmt (rate , per, nper_input, pv_input )
         print("\n" + "—"*40)
         print(result)
         print("\n" + "—"*40)
@@ -579,7 +580,7 @@ while True:
         for i in range (1 , interest_rate + 1) :
             while True :
                 try:
-                    daily_returns = input('daily_returns:  ')
+                    daily_returns = float(input('daily_returns:  '))
                     daily.append(daily_returns)
                     break
                 except ValueError :
